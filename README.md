@@ -21,7 +21,6 @@ Chỉ cần nhập một <b>chủ đề</b> hoặc <b>từ khóa</b>, hệ thố
 - [x] Hỗ trợ **nhạc nền**, có thể chọn ngẫu nhiên hoặc chỉ định file nhạc, điều chỉnh được `âm lượng nhạc nền`
 - [x] Nguồn video chất lượng **HD** và **miễn phí bản quyền**, đồng thời có thể sử dụng **file local**
 - [x] Hỗ trợ tích hợp nhiều mô hình AI như **OpenAI**, **Moonshot**, **Azure**, **gpt4free**, **one-api**, **Qwen**, **Google Gemini**, **Ollama**, **DeepSeek**, **ERNIE**,...
-    - Người dùng tại Trung Quốc nên dùng **DeepSeek** hoặc **Moonshot** làm nhà cung cấp (truy cập trực tiếp, không cần VPN, có credit miễn phí sau đăng ký, đủ dùng)
 
 ### Kế hoạch phát triển 📅
 
