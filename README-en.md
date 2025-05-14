@@ -4,15 +4,6 @@
 <h3>English | <a href="README.md">Tiếng Việt/a></h3>
 
 Simply provide a <b>topic</b> or <b>keyword</b>, and the system will automatically generate video scripts, source materials, subtitles, and background music—then produce a high-definition short video in seconds.
-
-### WebUI
-
-![](docs/webui-en.jpg)
-
-### API Interface
-
-![](docs/api.jpg)
-
 </div>
 
 ## Features 🎯
