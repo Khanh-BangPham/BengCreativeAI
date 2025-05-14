@@ -2,6 +2,7 @@ import os
 import platform
 import sys
 from uuid import uuid4
+import requests
 
 import streamlit as st
 from loguru import logger
@@ -102,6 +103,28 @@ support_locales = [
     "vi-VN",
     "th-TH",
 ]
+
+def get_openrouter_models():
+    url = f"{config.app.get("openrouter_base_url", "")}/models"
+    
+    try:
+        # CALL API GET models
+        response = requests.get(url)
+        
+        # (status code 200)
+        if response.status_code == 200:
+            # Parse JSON response
+            models_data = response.json()
+            models = [model["id"] for model in models_data["data"]]
+            return models
+        else:
+            print(f"An error occurred while calling the OpenRouter API: {response.status_code}")
+            print(response.text)
+            return None
+            
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return None
 
 
 def get_all_fonts():
@@ -229,7 +252,7 @@ if not config.app.get("hide_config", False):
                 "ERNIE",
                 "OpenRouter"
             ]
-            saved_llm_provider = config.app.get("llm_provider", "OpenAI").lower()
+            saved_llm_provider = config.app.get("llm_provider", "OpenRouter").lower()
             saved_llm_provider_index = 0
             for i, provider in enumerate(llm_providers):
                 if provider.lower() == saved_llm_provider:
@@ -274,10 +297,11 @@ if not config.app.get("hide_config", False):
                     llm_model_name = "moonshot-v1-8k"
                 with llm_helper:
                     tips = """ """
+
             if llm_provider == "oneapi":
                 if not llm_model_name:
                     llm_model_name = (
-                        "claude-3-5-sonnet-20240620"  # 默认模型，可以根据需要调整
+                        "claude-3-5-sonnet-20240620" 
                     )
                 with llm_helper:
                     tips = """"""
@@ -312,6 +336,15 @@ if not config.app.get("hide_config", False):
                 with llm_helper:
                     tips = """"""
 
+            if llm_provider == "openrouter":
+                get_openrouter_models()
+                if not llm_model_name:
+                    llm_model_name = "deepseek/deepseek-prover-v2:free"
+                if not llm_base_url:
+                    llm_base_url = "https://openrouter.ai/api/v1"
+                with llm_helper:
+                    tips = """"""
+
             if llm_provider == "ernie":
                 with llm_helper:
                     tips = """"""
@@ -328,11 +361,18 @@ if not config.app.get("hide_config", False):
             st_llm_base_url = st.text_input(tr("Base Url"), value=llm_base_url)
             st_llm_model_name = ""
             if llm_provider != "ernie":
-                st_llm_model_name = st.text_input(
-                    tr("Model Name"),
-                    value=llm_model_name,
-                    key=f"{llm_provider}_model_name_input",
-                )
+                if llm_provider == "openrouter":
+                    st_llm_model_name = st.selectbox(
+                        tr("Model Name"),
+                        options=get_openrouter_models(),
+                        key=f"{llm_provider}_model_name_input",
+                    )
+                else:                
+                    st_llm_model_name = st.text_input(
+                        tr("Model Name"),
+                        value=llm_model_name,
+                        key=f"{llm_provider}_model_name_input",
+                    )
                 if st_llm_model_name:
                     config.app[f"{llm_provider}_model_name"] = st_llm_model_name
             else:
